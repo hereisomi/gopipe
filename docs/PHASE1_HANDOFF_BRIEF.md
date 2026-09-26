@@ -1,12 +1,7 @@
 # gopipe — Phase 1 Handoff Brief
 **From:** Principal Architect / Project Lead
 **To:** Remote Go Developer
-**Repo:** https://github.com/tspr208/gopipe
-
-> **Access note:** the repo will NOT appear in your "Your repositories" list —
-> GitHub only shows repos you own there. Open the URL above directly and clone it.
-> You already have push access as a collaborator; commit directly to your assigned
-> branch.
+**Repo:** https://github.com/hereisomi/gopipe
 **Scope:** Phase 1 only — binary skeleton, subcommand dispatch, version, build script
 **Spec authority:** `phase1_unified_binary_architecture.md` (attached — that document is the contract; this note is the operating procedure around it)
 
