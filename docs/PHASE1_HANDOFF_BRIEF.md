@@ -33,7 +33,17 @@ Phase 2+ subcommands must route correctly and print a "not yet implemented" stub
 
 ## Workflow
 
-1. Clone the repo, create branch `feat/phase1` from `main`.
+1. Clone the repo, then check out **your assigned branch** (already created and
+   pushed — do not create a new one):
+
+   | Developer | Branch |
+   |---|---|
+   | `yfarzana750-lgtm` | `feat/phase1-yfarzana750` |
+   | `fhimi2986` | `feat/phase1-fhimi2986` |
+
+   Both branches implement the **same** Phase 1 spec independently — do not look at
+   or copy each other's branch. We merge one implementation after review.
+
 2. Implement per the spec; commit early and often, conventional-commit style
    (`feat:`, `chore:`, `docs:`).
 3. Open a PR to `main` when the acceptance checklist passes locally.
