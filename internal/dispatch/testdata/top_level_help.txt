@@ -1,0 +1,25 @@
+gopipe — Windows CLI pipeline wrapper for RPA and ETL tools
+
+Usage:
+  gopipe <subcommand> [flags]
+  gopipe <producer...> -r <consumer...> [flags]   (implicit pipeline mode)
+
+Subcommands:
+  pipeline    Run a producer→consumer pipeline (default when no subcommand given)
+  db          Execute database queries or load data (db extract / db load)
+  run         Run a named pipeline from the registry
+  registry    Manage named pipeline definitions
+  shell       Interactive pipeline REPL
+  gui         Launch native GUI (gopipe-gui.exe)
+  version     Print version and build information
+  help        Print help for a subcommand
+
+Examples:
+  gopipe python export.py -r python ingest.py --mode parallel
+  gopipe db extract --json task.json
+  gopipe db load --json load_task.json
+  gopipe run nightly-cdr
+  gopipe shell
+  gopipe gui
+
+Run 'gopipe help <subcommand>' for subcommand-specific flags.
