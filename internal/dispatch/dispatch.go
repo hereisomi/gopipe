@@ -68,6 +68,19 @@ func Register(c Command) {
 	registry = append(registry, c)
 }
 
+// UpdateRun replaces the Run handler of an already-registered command.
+// Used by later phases to wire real implementations without re-registering.
+// Panics if name is not found.
+func UpdateRun(name string, h Handler) {
+	for i := range registry {
+		if registry[i].Name == name {
+			registry[i].Run = h
+			return
+		}
+	}
+	panic(fmt.Sprintf("dispatch: UpdateRun: subcommand %q not found", name))
+}
+
 // Commands returns the registered commands in registration order.
 func Commands() []Command {
 	out := make([]Command, len(registry))
@@ -194,7 +207,11 @@ func invoke(ctx context.Context, c Command, display string, args []string, stdou
 // verb ("db extract") selects that verb. args is non-empty.
 func resolveVerb(c Command, args []string) (*Command, []string, bool) {
 	if strings.HasPrefix(args[0], "-") {
-		return find(c.Verbs, c.DefaultVerb), args, true
+		v := find(c.Verbs, c.DefaultVerb)
+		if v == nil {
+			return nil, nil, false
+		}
+		return v, args, true
 	}
 	if v := find(c.Verbs, args[0]); v != nil {
 		return v, args[1:], true
