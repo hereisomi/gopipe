@@ -1,5 +1,4 @@
-// Phase 3 — internal/connector/oracle.go
-//
-// Phase 1 skeleton: placeholder file per docs/phase1_unified_binary_architecture.md §5.
-// Implementation lands in Phase 3 — internal/connector/oracle.go.
 package connector
+
+import _ "github.com/sijms/go-ora/v2" // registers database/sql driver "oracle"
+const oracleDriver = "oracle"
