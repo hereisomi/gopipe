@@ -78,14 +78,39 @@ func buildFlagSet(cfg *Config) *flag.FlagSet {
 	return fs
 }
 
-// splitAtDashDash splits args into [before --] and [after --].
+// splitAtDashDash splits args into pipeline args and flag args.
+// Pipeline args are everything up to and including the last consumer segment
+// (delimited by -r). Flag args follow "--" or come after all -r segments.
+// -r is a pipeline separator, not a flag, so it is never treated as a flag.
 func splitAtDashDash(args []string) (pipe, flags []string) {
+	// Explicit "--" always wins.
 	for i, a := range args {
 		if a == "--" {
 			return args[:i], args[i+1:]
 		}
 	}
-	// No "--": flags are anything starting with "-", pipeline args are the rest.
+	// No "--": scan for -r separators to find where pipeline args end.
+	// Everything after the last consumer segment that starts with "-" (but is
+	// not "-r") is a flag.
+	lastConsumerEnd := -1
+	inConsumer := false
+	for i, a := range args {
+		if a == "-r" {
+			inConsumer = true
+			continue
+		}
+		if inConsumer {
+			if strings.HasPrefix(a, "-") && a != "-r" {
+				// First flag after a consumer segment — split here.
+				return args[:i], args[i:]
+			}
+			lastConsumerEnd = i
+		}
+	}
+	if lastConsumerEnd >= 0 {
+		return args[:lastConsumerEnd+1], nil
+	}
+	// No -r found: split at first flag.
 	for i, a := range args {
 		if strings.HasPrefix(a, "-") {
 			return args[:i], args[i:]
