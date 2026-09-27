@@ -68,14 +68,30 @@ func Register(c Command) {
 	registry = append(registry, c)
 }
 
-// UpdateRun replaces the Run handler of an already-registered command.
-// Used by later phases to wire real implementations without re-registering.
-// Panics if name is not found.
+// UpdateRun replaces the handler of an already-registered command. Updating
+// a group also wires its default verb, so UpdateRun("db", extractHandler)
+// serves both "db extract" and "db --json" without re-registering either.
+// A later phase can update another verb with UpdateRun("db load", handler).
+// A missing command is a programmer error and panics during initialization.
 func UpdateRun(name string, h Handler) {
-	for i := range registry {
-		if registry[i].Name == name {
-			registry[i].Run = h
-			return
+	parts := strings.Fields(name)
+	if len(parts) > 0 {
+		if c := find(registry, parts[0]); c != nil {
+			if len(parts) == 1 {
+				c.Run = h
+				if c.DefaultVerb != "" {
+					if v := find(c.Verbs, c.DefaultVerb); v != nil {
+						v.Run = h
+					}
+				}
+				return
+			}
+			if len(parts) == 2 {
+				if v := find(c.Verbs, parts[1]); v != nil {
+					v.Run = h
+					return
+				}
+			}
 		}
 	}
 	panic(fmt.Sprintf("dispatch: UpdateRun: subcommand %q not found", name))

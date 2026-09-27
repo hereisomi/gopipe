@@ -1,3 +1,5 @@
+//go:build windows
+
 // Package windows provides Windows console helpers: ANSI/VT100 enable,
 // console title management, and console-vs-pipe detection (spec §F-17).
 package windows

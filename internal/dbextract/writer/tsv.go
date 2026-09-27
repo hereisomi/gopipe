@@ -1,5 +1,7 @@
-// Phase 3 — internal/dbextract/writer/tsv.go
-//
-// Phase 1 skeleton: placeholder file per docs/phase1_unified_binary_architecture.md §5.
-// Implementation lands in Phase 3 — internal/dbextract/writer/tsv.go.
 package writer
+
+import "io"
+
+// TSV uses CSV-style quoting with a tab delimiter to preserve embedded tabs
+// and newlines without corrupting the column structure.
+func NewTSV(out io.Writer) Writer { return newDelimited(out, '\t') }
